@@ -1,220 +1,446 @@
-const baseUrl = "https://www.news.developeridn.com/";
-const EkonomiPoin = `${baseUrl}ekonomi`;
-const OlahragaPoin = `${baseUrl}olahraga`;
-const TeknologiPoin = `${baseUrl}teknologi`;
-const HiburanPoin = `${baseUrl}hiburan`;
-const GayahidupPoin = `${baseUrl}gaya-hidup`;
-
+const baseUrl = "http://localhost/tugasrestfulserver/index.php/";
+const token = "API-TOKEN=9012345678";
+const ProdiUrl = `${baseUrl}prodi?${token}`;
+const JenisPembayaranUrl = `${baseUrl}jenispembayaran?${token}`;
+const JenisPenggunaUrl = `${baseUrl}jenispengguna?${token}`;
+                        
 const contents = document.querySelector("#content-list");
-const tittle = document.querySelector(".card-tittle");
-const ViewModal = document.querySelector(".modal");
+const title = document.querySelector(".card-title");
 
-function getEconomy(){
-	tittle.innerHTML="Berita Mengenai Ekonomi";
-	fetch(EkonomiPoin)
-		.then(response => response.json())
-		.then(resJson=>{
-			console.log(resJson.data);
-			let data = "";
-			resJson.data.forEach(economy=>{
-				data +=`
-				<li class="collection-item avatar" style="background-color:#E9B798">
-					<img src="${economy.poster}" alt="" width="300px">
-					<p><span class="title"><b><h5>${economy.judul}</h5></b></span>
-					<b>Diambil dari</b> : ${economy.link} <br>
-					<b>Waktu</b> : ${economy.waktu} <br>
-					</p>
-					<center><a href="#modal1" data-link="${economy.link}" class="secondary-content modal-trigger"><i class="material-icons" data-link="${economy.link}">info</i><br>Klik Untuk Baca</a></center>
-			  </li>
-			   `
-			});
-			contents.innerHTML = `<ul class="collection">`+data+'</ul>';
-			const tombol = document.querySelectorAll('.secondary-content');
-			tombol.forEach(button=>{
-				 button.onclick=(event) =>{
-					TampilData(baseUrl + "detail/?url=" + event.target.dataset.link);
-				 }
-			})
-		}).catch(err=>{
-			console.error(err);
-		})
-}
+function getListProdi(){
+	// tittle.innerHTML="Kelasmen Sementara Liga Primer Inggris";
+	fetch(ProdiUrl)
+	  .then(response => response.json())
+	  .then(resJson=>{
+		console.log(resJson.data);
+		let data = "";
+		let i = 1;
+		resJson.data.forEach(prodigy=>{
+		  data += `
+			<tr>
+			  <td>${i++}.</td>
+			  <td>${prodigy.jenjang}</td>
+			  <td>${prodigy.prodi}</td>
+			</tr>
+		   `
+		});
+		contents.innerHTML = `
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+		<!-- Ionicons -->
+		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		<!-- Tempusdominus Bootstrap 4 -->
+		<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+		<!-- iCheck -->
+		<link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+		<!-- JQVMap -->
+		<link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+		<!-- Theme style -->
+		<link rel="stylesheet" href="css/adminlte.min.css">
+		<!-- overlayScrollbars -->
+		<link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+		<!-- Daterange picker -->
+		<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+		<!-- summernote -->
+		<link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+		<!-- DataTables -->
+		<link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+		<link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+		<link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 
-function getSports(){
-	tittle.innerHTML="Berita Mengenai Olahraga";
-	fetch(OlahragaPoin)
-		.then(response => response.json())
-		.then(resJson=>{
-			console.log(resJson.data);
-			let data = "";
-			resJson.data.forEach(sports=>{
-				data +=`
-				<li class="collection-item avatar" style="background-color:#E9B798">
-					<img src="${sports.poster}" alt="" width="300px">
-					<p><span class="title"><b><h5>${sports.judul}</h5></b></span>
-					<b>Diambil dari</b> : ${sports.link} <br>
-					<b>Waktu</b> : ${sports.waktu} <br>
-					</p>
-					<center><a href="#modal1" data-link="${sports.link}" class="secondary-content modal-trigger"><i class="material-icons" data-link="${sports.link}">info</i><br>Klik Untuk Baca</a></center>
-			  </li>
-			   `
-			});
-			contents.innerHTML = `<ul class="collection">`+data+'</ul>';
-			const tombol = document.querySelectorAll('.secondary-content');
-			tombol.forEach(button=>{
-				 button.onclick=(event) =>{
-					TampilData(baseUrl + "detail/?url=" + event.target.dataset.link);
-				 }
-			})
-		}).catch(err=>{
-			console.error(err);
-		})
-}
-
-function getTechnology(){
-	tittle.innerHTML="Berita Mengenai Teknologi";
-	fetch(TeknologiPoin)
-		.then(response => response.json())
-		.then(resJson=>{
-			console.log(resJson.data);
-			let data = "";
-			resJson.data.forEach(technology=>{
-				data +=`
-				<li class="collection-item avatar" style="background-color:#E9B798">
-					<img src="${technology.poster}" alt="" width="300px">
-					<p><span class="title"><b><h5>${technology.judul}</h5></b></span>
-					<b>Diambil dari</b> : ${technology.link} <br>
-					<b>Waktu</b> : ${technology.waktu} <br>
-					</p>
-					<center><a href="#modal1" data-link="${technology.link}" class="secondary-content modal-trigger"><i class="material-icons" data-link="${technology.link}">info</i><br>Klik Untuk Baca</a></center>
-			  </li>
-			   `
-			});
-			contents.innerHTML = `<ul class="collection">`+data+'</ul>';
-			const tombol = document.querySelectorAll('.secondary-content');
-			tombol.forEach(button=>{
-				 button.onclick=(event) =>{
-					TampilData(baseUrl + "detail/?url=" + event.target.dataset.link);
-				 }
-			})
-		}).catch(err=>{
-			console.error(err);
-		})
-}
-
-function getEntertainment(){
-	tittle.innerHTML="Berita Mengenai Hiburan";
-	fetch(HiburanPoin)
-		.then(response => response.json())
-		.then(resJson=>{
-			console.log(resJson.data);
-			let data = "";
-			resJson.data.forEach(entertainment=>{
-				data +=`
-				<li class="collection-item avatar" style="background-color:#E9B798">
-					<img src="${entertainment.poster}" alt="" width="300px">
-					<p><span class="title"><b><h5>${entertainment.judul}</h5></b></span>
-					<b>Diambil dari</b> : ${entertainment.link} <br>
-					<b>Waktu</b> : ${entertainment.waktu} <br>
-					</p>
-					<center><a href="#modal1" data-link="${entertainment.link}" class="secondary-content modal-trigger"><i class="material-icons" data-link="${entertainment.link}">info</i><br>Klik Untuk Baca</a></center>
-			  </li>
-			   `
-			});
-			contents.innerHTML = `<ul class="collection">`+data+'</ul>';
-			const tombol = document.querySelectorAll('.secondary-content');
-			tombol.forEach(button=>{
-				 button.onclick=(event) =>{
-					TampilData(baseUrl + "detail/?url=" + event.target.dataset.link);
-				 }
-			})
-		}).catch(err=>{
-			console.error(err);
-		})
-}
-
-function getLifeStyle(){
-	tittle.innerHTML="Berita Mengenai Gaya Hidup";
-	fetch(GayahidupPoin)
-		.then(response => response.json())
-		.then(resJson=>{
-			console.log(resJson.data);
-			let data = "";
-			resJson.data.forEach(lifestyle=>{
-				data +=`
-				<li class="collection-item avatar" style="background-color:#E9B798">
-					<img src="${lifestyle.poster}" alt="" width="300px">
-					<p><span class="title"><b><h5>${lifestyle.judul}</h5></b></span>
-					<b>Diambil dari</b> : ${lifestyle.link} <br>
-					<b>Waktu</b> : ${lifestyle.waktu} <br>
-					</p>
-					<center><a href="#modal1" data-link="${lifestyle.link}" class="secondary-content modal-trigger"><i class="material-icons" data-link="${lifestyle.link}">info</i><br>Klik Untuk Baca</a></center>
-			  </li>
-			   `
-			});
-			contents.innerHTML = `<ul class="collection">`+data+'</ul>';
-			const tombol = document.querySelectorAll('.secondary-content');
-			tombol.forEach(button=>{
-				 button.onclick=(event) =>{
-					TampilData(baseUrl + "detail/?url=" + event.target.dataset.link);
-				 }
-			})
-		}).catch(err=>{
-			console.error(err);
-		})
-}
-
-function TampilData(link){
-	// contents.innerHTML="Link bos : "+link;
-	fetch(link)
-		.then(response => response.json())
-		.then(resJson=>{
-			console.log(resJson.data);
-			let data = "";
-			resJson.data.forEach(datatekno=>{
-				data +=`
-				<center>
-				<div class="card-image">
-					<img class="responsive-img"  src="${datatekno.poster}" width="500px"><br>
+		<div class="content-wrapper">
+		<section class="content-header">
+		<div class="container-fluid">
+			<div class="row md-9">
+			<div class="col-sm-6">
+				<h1>Data Prodi</h1>
+			</div>
+			</div>
+		</div><!-- /.container-fluid -->
+		</section>
+		<section class="content">
+		  <div class="container-fluid">
+			<div class="row">
+			  <div class="col-12">
+				<div class="card">
+				  <div class="card-header">
+					<h3 class="card-title">Data yang menampilkan isi dari berbagai jurusan yang ada di ITN Malang</h3>
+				  </div>
+				<div class="card">
+				  <!-- /.card-header -->
+				  <div class="card-body">
+					<table id="example1" class="table table-bordered table-striped">
+					  <thead>
+					  <tr>
+						<th>NOMOR</th>
+						<th>JENJANG</th>
+						<th>PRODI</th>
+					  </tr>
+					  </thead>
+					  <tbody>
+					   ${data}
+					  </tbody>
+					  <tfoot>
+					  <tr>
+						<th>NOMOR</th>
+						<th>JENJANG</th>
+						<th>PRODI</th>
+					  </tr>
+					  </tfoot>
+					</table>
+				  </div>
+				  <!-- /.card-body -->
 				</div>
-				</center>
-				<div class="modal-content">
-                            <h4><b>${datatekno.judul}</b></h4>
-								<p>
-								<center>---------------------------------------------------</center><br>
-                                    ${datatekno.body}<br>
-								</p>
-								<center>---------------------------------------------------</center><br>
-                        </div>
-                        <div class="modal-footer">
-                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">TUTUP</a>
-						</div>
+				<!-- /.card -->
+			  </div>
+			  <!-- /.col -->
+			</div>
+			<!-- /.row -->
+		  </div>
+		  <!-- /.container-fluid -->
+		</section>
+		</div>
+
+		<!-- jQuery -->
+		<script src="plugins/jquery/jquery.min.js"></script>
+		<!-- Bootstrap 4 -->
+		<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- DataTables  & Plugins -->
+		<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+		<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+		<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/jszip/jszip.min.js"></script>
+		<script src="plugins/pdfmake/pdfmake.min.js"></script>
+		<script src="plugins/pdfmake/vfs_fonts.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+		<!-- AdminLTE App -->
+		<script src="js/adminlte.min.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="js/demo.js"></script>
+		<!-- Page specific script -->
+		`
+		$(function () {
+			$("#example1").DataTable({
+			  "responsive": true, "lengthChange": false, "autoWidth": false,
+			  "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			$('#example2').DataTable({
+			  "paging": true,
+			  "lengthChange": false,
+			  "searching": false,
+			  "ordering": true,
+			  "info": true,
+			  "autoWidth": false,
+			  "responsive": true,
+			});
+		  });
+
+	  }).catch(err=>{
+		console.error(err);
+	  })
+  }
+
+  function getListJenisPembayaran(){
+	// tittle.innerHTML="Kelasmen Sementara Liga Primer Inggris";
+	fetch(JenisPembayaranUrl)
+	  .then(response => response.json())
+	  .then(resJson=>{
+		console.log(resJson.data);
+		let data = "";
+		let i = 1;
+		resJson.data.forEach(jnsbyr=>{
+		  data += `
+			<tr>
+			  <td>${i++}.</td>
+			  <td>${jnsbyr.virtual}</td>
+			  <td>${jnsbyr.jenis_pembayaran}</td>
+			</tr>
+		   `
+		});
+		contents.innerHTML = `
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+		<!-- Ionicons -->
+		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		<!-- Tempusdominus Bootstrap 4 -->
+		<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+		<!-- iCheck -->
+		<link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+		<!-- JQVMap -->
+		<link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+		<!-- Theme style -->
+		<link rel="stylesheet" href="css/adminlte.min.css">
+		<!-- overlayScrollbars -->
+		<link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+		<!-- Daterange picker -->
+		<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+		<!-- summernote -->
+		<link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+		<!-- DataTables -->
+		<link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+		<link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+		<link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+		<div class="content-wrapper">
+		<section class="content-header">
+		<div class="container">
+			<div class="row lg-9">
+			<div class="col-lg-6">
+				<h1>Data Prodi</h1>
+			</div>
+			</div>
+		</div><!-- /.container-fluid -->
+		</section>
+		<section class="content">
+		  <div class="container">
+			<div class="row">
+			  <div class="col-12">
+				<div class="card">
+				  <div class="card-header">
+					<h3 class="card-title">Data yang menampilkan isi dari berbagai jurusan yang ada di ITN Malang</h3>
+				  </div>
+				<div class="card">
+				  <!-- /.card-header -->
+				  <div class="card-body">
+					<table id="example1" class="table table-bordered table-striped">
+					  <thead>
+					  <tr>
+						<th>NOMOR</th>
+						<th>NO VIRTUAL</th>
+						<th>JENIS PEMBAYARAN</th>
+					  </tr>
+					  </thead>
+					  <tbody>
+					   ${data}
+					  </tbody>
+					  <tfoot>
+					  <tr>
+						<th>NOMOR</th>
+						<th>NO VIRTUAL</th>
+						<th>JENIS PEMBAYARAN</th>
+					  </tr>
+					  </tfoot>
+					</table>
+				  </div>
+				  <!-- /.card-body -->
 				</div>
-				`
-			})
-			ViewModal.innerHTML = `<ul class="collection">`+data+'</ul>';
-			})
-			.catch(err=>{
-				console.error(err);
-		})
-}
+				<!-- /.card -->
+			  </div>
+			  <!-- /.col -->
+			</div>
+			<!-- /.row -->
+		  </div>
+		  <!-- /.container-fluid -->
+		</section>
+		</div>
+
+		<!-- jQuery -->
+		<script src="plugins/jquery/jquery.min.js"></script>
+		<!-- Bootstrap 4 -->
+		<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- DataTables  & Plugins -->
+		<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+		<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+		<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/jszip/jszip.min.js"></script>
+		<script src="plugins/pdfmake/pdfmake.min.js"></script>
+		<script src="plugins/pdfmake/vfs_fonts.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+		<!-- AdminLTE App -->
+		<script src="js/adminlte.min.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="js/demo.js"></script>
+		<!-- Page specific script -->
+		`
+		$(function () {
+			$("#example1").DataTable({
+			  "responsive": true, "lengthChange": false, "autoWidth": false,
+			  "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			$('#example2').DataTable({
+			  "paging": true,
+			  "lengthChange": false,
+			  "searching": false,
+			  "ordering": true,
+			  "info": true,
+			  "autoWidth": false,
+			  "responsive": true,
+			});
+		  });
+	  }).catch(err=>{
+		console.error(err);
+	  })
+  }
+
+  function getListJenisPengguna(){
+	// tittle.innerHTML="Kelasmen Sementara Liga Primer Inggris";
+	fetch(JenisPenggunaUrl)
+	  .then(response => response.json())
+	  .then(resJson=>{
+		console.log(resJson.data);
+		let data = "";
+		let i = 1;
+		resJson.data.forEach(jnspgn=>{
+		  data += `
+			<tr>
+			  <td>${i++}.</td>
+			  <td>${jnspgn.jenis_pengguna}</td>
+			  <td>${jnspgn.hak_akses}</td>
+			</tr>
+		   `
+		});
+		contents.innerHTML = `
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+		<!-- Ionicons -->
+		<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+		<!-- Tempusdominus Bootstrap 4 -->
+		<link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+		<!-- iCheck -->
+		<link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+		<!-- JQVMap -->
+		<link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+		<!-- Theme style -->
+		<link rel="stylesheet" href="css/adminlte.min.css">
+		<!-- overlayScrollbars -->
+		<link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+		<!-- Daterange picker -->
+		<link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+		<!-- summernote -->
+		<link rel="stylesheet" href="plugins/summernote/summernote-bs4.min.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+		<!-- DataTables -->
+		<link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+		<link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+		<link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+		<div class="content-wrapper">
+		<section class="content-header">
+		<div class="container">
+			<div class="row lg-9">
+			<div class="col-lg-6">
+				<h1>Data Prodi</h1>
+			</div>
+			</div>
+		</div><!-- /.container-fluid -->
+		</section>
+		<section class="content">
+		  <div class="container">
+			<div class="row">
+			  <div class="col-12">
+				<div class="card">
+				  <div class="card-header">
+					<h3 class="card-title">Data yang menampilkan isi dari berbagai jurusan yang ada di ITN Malang</h3>
+				  </div>
+				<div class="card">
+				  <!-- /.card-header -->
+				  <div class="card-body">
+					<table id="example1" class="table table-bordered table-striped">
+					  <thead>
+					  <tr>
+						<th>NOMOR</th>
+						<th>JENIS PENGGUNA</th>
+						<th>HAK AKSES</th>
+					  </tr>
+					  </thead>
+					  <tbody>
+					   ${data}
+					  </tbody>
+					  <tfoot>
+					  <tr>
+						<th>NOMOR</th>
+						<th>JENIS PENGGUNA</th>
+						<th>HAK AKSES</th>
+					  </tr>
+					  </tfoot>
+					</table>
+				  </div>
+				  <!-- /.card-body -->
+				</div>
+				<!-- /.card -->
+			  </div>
+			  <!-- /.col -->
+			</div>
+			<!-- /.row -->
+		  </div>
+		  <!-- /.container-fluid -->
+		</section>
+		</div>
+
+		<!-- jQuery -->
+		<script src="plugins/jquery/jquery.min.js"></script>
+		<!-- Bootstrap 4 -->
+		<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+		<!-- DataTables  & Plugins -->
+		<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+		<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+		<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+		<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+		<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+		<script src="plugins/jszip/jszip.min.js"></script>
+		<script src="plugins/pdfmake/pdfmake.min.js"></script>
+		<script src="plugins/pdfmake/vfs_fonts.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
+		<script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+		<!-- AdminLTE App -->
+		<script src="js/adminlte.min.js"></script>
+		<!-- AdminLTE for demo purposes -->
+		<script src="js/demo.js"></script>
+		<!-- Page specific script -->
+		`
+		$(function () {
+			$("#example1").DataTable({
+			  "responsive": true, "lengthChange": false, "autoWidth": false,
+			  "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+			$('#example2').DataTable({
+			  "paging": true,
+			  "lengthChange": false,
+			  "searching": false,
+			  "ordering": true,
+			  "info": true,
+			  "autoWidth": false,
+			  "responsive": true,
+			});
+		  });
+	  }).catch(err=>{
+		console.error(err);
+	  })
+  }
 
 function loadPage(page){
 	switch(page){
-		case "ekonomi":
-			getEconomy();
+		case "Prodi":
+			getListProdi();
 			break;
-		case "olahraga":
-			getSports();
+		case "JenisPembayaran":
+			getListJenisPembayaran();
 			break;
-		case "teknologi":
-			getTechnology();
-			break;
-		case "hiburan":
-			getEntertainment();
-			break;
-		case "gayahidup":
-			getLifeStyle();
+		case "JenisPengguna":
+			getListJenisPengguna();
 			break;
 	}
 }
@@ -222,7 +448,7 @@ function loadPage(page){
 document.addEventListener('DOMContentLoaded', function (){
 	var elems = document.querySelectorAll('.sidenav');
 	var instances = M.Sidenav.init(elems);
-	// getEconomy();
+	// getListProdi();
 
 	document.querySelectorAll(".sidenav a, .topnav a").forEach(elm=>{
 		elm.addEventListener("click", evt=>{
@@ -234,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function (){
 	})
 
 	var page = window.location.hash.substr(1);
-	if (page === "" || page === "!" ) page = "ekonomi";
+	if (page === "" || page === "!" ) page = "prodi";
 
 	var modal = document.querySelectorAll('.modal');
     M.Modal.init(modal);
